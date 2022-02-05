@@ -1,3 +1,4 @@
+import e from 'express';
 import express from 'express';
 import { read } from './jsonFileStorage.js';
 
@@ -33,8 +34,41 @@ app.get('/sightings/:index', (request, response) => {
   response.send(content);
    })
 })
+
+let stateSeen = ""
+app.get('/year-sightings/:year', (request, response) => {
+ 
+   console.log('request came in');
+     console.log(request.params.year)
+    read('data.json', (err, jsonContentObj)=> {
+     
+    jsonContentObj.sightings.forEach(element => {
+
+      if (element.YEAR === request.params.year) {
+        console.log(element.YEAR)
+        console.log(element.STATE)
+        console.log(typeof(element.STATE))
+        stateSeen += ( element.YEAR + "<br>"+ element.STATE + "<br>")
+        console.log(stateSeen)
+      }
+    })
     
+    // const content = `
+    // <html>
+    //   <body>
+    //     <h1>${response.send(stateSeen)}
+    //     </h1>          
+    //     </body>
+    // </html>
+    // `;
+    
+    response.send(stateSeen)
+    })
+    // response.send(content)
+})
   
+
+
 
 app.listen(port,() => {
   console.log(`so sighted`)
